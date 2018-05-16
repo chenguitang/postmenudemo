@@ -11,97 +11,168 @@
     tools:context="com.posin.postmenudemo.MainActivity">
 
     <Button
-        android:id="@+id/btn_init_ui"
+        android:id="@+id/btn_add_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
         android:padding="20dp"
-        android:text="初始化副屏布局"
+        android:text="黄焖鸡"
         android:textSize="22sp" />
 
     <Button
-        android:id="@+id/btn_add_menu"
+        android:id="@+id/btn_sub_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toLeftOf="@id/btn_init_ui"
-        android:layout_toStartOf="@id/btn_init_ui"
+        android:layout_below="@id/btn_add_1"
+        android:layout_centerHorizontal="true"
         android:padding="20dp"
-        android:text="增加菜品"
+        android:text="黄焖鸭"
         android:textSize="22sp" />
 
     <Button
-        android:id="@+id/btn_add_menu2"
+        android:id="@+id/btn_add_2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toLeftOf="@id/btn_add_menu"
-        android:layout_toStartOf="@id/btn_add_menu"
+        android:layout_toEndOf="@id/btn_add_1"
+        android:layout_toRightOf="@id/btn_add_1"
         android:padding="20dp"
-        android:text="增加菜品2"
+        android:text="黄焖牛"
         android:textSize="22sp" />
 
     <Button
-        android:id="@+id/btn_sub_menu1"
+        android:id="@+id/btn_sub_2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toEndOf="@id/btn_init_ui"
-        android:layout_toRightOf="@id/btn_init_ui"
+        android:layout_below="@id/btn_add_2"
+        android:layout_toEndOf="@id/btn_add_1"
+        android:layout_toRightOf="@id/btn_add_1"
         android:padding="20dp"
-        android:text="减少菜品"
+        android:text="黄焖羊"
         android:textSize="22sp" />
 
     <Button
-        android:id="@+id/btn_sub_menu2"
+        android:id="@+id/btn_add_3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toEndOf="@id/btn_sub_menu1"
-        android:layout_toRightOf="@id/btn_sub_menu1"
+        android:layout_toEndOf="@id/btn_add_2"
+        android:layout_toRightOf="@id/btn_add_2"
         android:padding="20dp"
-        android:text="减少菜品2"
+        android:text="黄焖猪"
+        android:textSize="22sp" />
+
+    <Button
+        android:id="@+id/btn_sub_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btn_add_3"
+        android:layout_toEndOf="@id/btn_add_2"
+        android:layout_toRightOf="@id/btn_add_2"
+        android:padding="20dp"
+        android:text="黄焖狗"
+        android:textSize="22sp" />
+
+    <Button
+        android:id="@+id/btn_add_4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_toEndOf="@id/btn_add_3"
+        android:layout_toRightOf="@id/btn_add_3"
+        android:padding="20dp"
+        android:text="黄焖马"
+        android:textSize="22sp" />
+
+    <Button
+        android:id="@+id/btn_sub_4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_toEndOf="@id/btn_add_3"
+        android:layout_toRightOf="@id/btn_add_3"
+        android:layout_below="@id/btn_add_4"
+        android:padding="20dp"
+        android:text="黄焖蛇"
+        android:textSize="22sp" />
+
+    <Button
+        android:id="@+id/btn_add_5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/btn_add_4"
+        android:layout_toRightOf="@id/btn_add_4"
+        android:layout_centerHorizontal="true"
+        android:padding="20dp"
+        android:text="黄焖兔"
+        android:textSize="22sp" />
+
+    <Button
+        android:id="@+id/btn_sub_5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/btn_add_4"
+        android:layout_toRightOf="@id/btn_add_4"
+        android:layout_below="@id/btn_add_5"
+        android:layout_centerHorizontal="true"
+        android:padding="20dp"
+        android:text="黄焖鼠"
+        android:textSize="22sp" />
+
+
+    <Button
+        android:id="@+id/btn_add_6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/btn_add_1"
+        android:layout_toStartOf="@id/btn_add_1"
+        android:layout_centerHorizontal="true"
+        android:padding="20dp"
+        android:text="黄焖龙"
+        android:textSize="22sp" />
+
+    <Button
+        android:id="@+id/btn_sub_6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/btn_add_1"
+        android:layout_toStartOf="@id/btn_add_1"
+        android:layout_below="@id/btn_add_6"
+        android:layout_centerHorizontal="true"
+        android:padding="20dp"
+        android:text="黄焖猴"
+        android:textSize="22sp" />
+
+
+
+    <Button
+        android:id="@+id/btn_add_7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/btn_add_6"
+        android:layout_toStartOf="@id/btn_add_6"
+        android:layout_centerHorizontal="true"
+        android:padding="20dp"
+        android:text="黄焖123"
+        android:textSize="22sp" />
+
+    <Button
+        android:id="@+id/btn_sub_7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/btn_add_6"
+        android:layout_toStartOf="@id/btn_add_6"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/btn_add_7"
+        android:padding="20dp"
+        android:text="黄焖456"
         android:textSize="22sp" />
 
     <Button
         android:id="@+id/btn_pay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/btn_init_ui"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
         android:padding="20dp"
         android:text="支付"
-        android:textSize="22sp" />
-
-    <Button
-        android:id="@+id/btn_clear_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/btn_init_ui"
-        android:layout_toRightOf="@id/btn_pay"
-        android:layout_toEndOf="@id/btn_pay"
-        android:padding="20dp"
-        android:text="清空菜单栏"
-        android:textSize="22sp" />
-
-    <Button
-        android:id="@+id/btn_send_all_menu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:layout_centerHorizontal="true"
-        android:text="整单发送"
-        android:textSize="22sp" />
-
-    <Button
-        android:id="@+id/btn_send_all_menu2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:layout_toRightOf="@id/btn_send_all_menu"
-        android:layout_toEndOf="@id/btn_send_all_menu"
-        android:layout_centerHorizontal="true"
-        android:text="整单发送2"
         android:textSize="22sp" />
 </RelativeLayout>

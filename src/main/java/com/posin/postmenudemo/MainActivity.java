@@ -8,9 +8,10 @@ import android.widget.Toast;
 
 import com.posin.menumanager.pattern.MenuManager;
 import com.posin.menumanager.pattern.model.Dishes;
-import com.posin.menumanager.socket.listener.ConnectCallback;
+import com.posin.menumanager.socket.listener.Callback;
 import com.posin.menumanager.socket.listener.SendCallback;
 import com.posin.menumanager.utils.DoubleUtils;
+import com.posin.menumanager.utils.LogUtils;
 
 import java.util.LinkedHashMap;
 
@@ -23,7 +24,9 @@ public class MainActivity extends AppCompatActivity {
 
     private MenuManager mUIManager;
 
-    private double sum;
+    private boolean connect_success = false;
+    LinkedHashMap<String, Dishes> mMenuMaps;
+    private double sum = 0;
 
 
     @Override
@@ -36,603 +39,136 @@ public class MainActivity extends AppCompatActivity {
 
     private void initData() {
         try {
+            mMenuMaps = new LinkedHashMap<>();
             mUIManager = MenuManager.getInstance();
-            Log.e(TAG, "init data ... ");
+            mUIManager.init(11, true, new Callback() {
+                @Override
+                public void connectSuccess() {
+                    connect_success = true;
+                }
+
+                @Override
+                public void connectFailure(Exception e) {
+                    connect_success = false;
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    @OnClick({R.id.btn_init_ui, R.id.btn_add_menu, R.id.btn_add_menu2,
-            R.id.btn_sub_menu1, R.id.btn_sub_menu2, R.id.btn_pay, R.id.btn_clear_layout,
-            R.id.btn_send_all_menu, R.id.btn_send_all_menu2})
+    @OnClick({R.id.btn_add_1, R.id.btn_add_2, R.id.btn_add_3, R.id.btn_add_4, R.id.btn_add_5,
+            R.id.btn_add_6, R.id.btn_add_7, R.id.btn_sub_1, R.id.btn_sub_2, R.id.btn_sub_3,
+            R.id.btn_sub_4, R.id.btn_sub_5, R.id.btn_sub_6, R.id.btn_sub_7, R.id.btn_pay})
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_init_ui:
-                try {
-
-                    mUIManager.connect(new ConnectCallback() {
-                        @Override
-                        public void connectSuccess() throws Exception {
-//                            mUIManager.initDefaultUI(6, true, new SendCallback() {
-//                                @Override
-//                                public void success() {
-                            Log.e(TAG, "#########     发送成功    ########");
-//                                }
-//
-//                                @Override
-//                                public void failure(Exception e) {
-//                                    Log.e(TAG, "## 发送失败 ## " + e.getMessage());
-//                                }
-//                            });
-                        }
-
-                        @Override
-                        public void connectFailure(Exception e) throws Exception {
-                            Log.e(TAG, "连接失败： " + e.getMessage());
-                        }
-                    });
-
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+            case R.id.btn_add_1:
+                addFood("黄焖鸡");
                 break;
-            case R.id.btn_add_menu:
-                try {
-//                    mUIManager.addMenu("蒸熊掌", 2, 40.25);
-                    for (int i = 0; i < 15; i++) {
-                        if (i % 2 == 0) {
-                            sum = DoubleUtils.add(sum, 40.275);
-                            mUIManager.addMenu("蒸熊掌" + i, 1, 40.275, sum, new SendCallback() {
-                                @Override
-                                public void success() {
-                                    Log.e(TAG, "#########     发送成功    ########");
-                                }
-
-                                @Override
-                                public void failure(Exception e) {
-                                    Log.e(TAG, "## 发送失败 ## " + e.getMessage());
-                                }
-                            });
-                        } else {
-                            sum = DoubleUtils.add(sum, 12.275);
-                            mUIManager.addMenu("蒸熊掌" + i, 1, 12.275, sum, new SendCallback() {
-                                @Override
-                                public void success() {
-                                    Log.e(TAG, "#########     发送成功    ########");
-                                }
-
-                                @Override
-                                public void failure(Exception e) {
-                                    Log.e(TAG, "## 发送失败 ## " + e.getMessage());
-                                }
-                            });
-                        }
-                        Thread.sleep(1000);
-                    }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+            case R.id.btn_add_2:
+                addFood("黄焖牛");
                 break;
-            case R.id.btn_add_menu2:
-                try {
-                    sum = DoubleUtils.add(sum, 12.275);
-                    mUIManager.addMenu("蒸熊掌" + 2, 1, 12.275, sum, new SendCallback() {
-                        @Override
-                        public void success() {
-                            Log.e(TAG, "#########     发送成功    ########");
-                        }
-
-                        @Override
-                        public void failure(Exception e) {
-                            Log.e(TAG, "## 发送失败 ## " + e.getMessage());
-                        }
-                    });
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+            case R.id.btn_add_3:
+                addFood("黄焖猪");
                 break;
-            case R.id.btn_sub_menu1:
-                try {
-                    for (int i = 14; i >= 0; i--) {
-                        if (i % 2 == 0) {
-                            sum = DoubleUtils.subtract(sum, 40.275);
-                            mUIManager.subsideMenu("蒸熊掌" + i, 1, 40.275, sum, new SendCallback() {
-                                @Override
-                                public void success() {
-                                    Log.e(TAG, "#########     发送成功    ########");
-                                }
-
-                                @Override
-                                public void failure(Exception e) {
-                                    Log.e(TAG, "## 发送失败 ## " + e.getMessage());
-                                }
-                            });
-                        } else {
-                            sum = DoubleUtils.subtract(sum, 12.275);
-                            mUIManager.subsideMenu("蒸熊掌" + i, 1, 12.275, sum, new SendCallback() {
-                                @Override
-                                public void success() {
-                                    Log.e(TAG, "#########     发送成功    ########");
-                                }
-
-                                @Override
-                                public void failure(Exception e) {
-                                    Log.e(TAG, "## 发送失败 ## " + e.getMessage());
-                                }
-                            });
-                        }
-                        Thread.sleep(1000);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+            case R.id.btn_add_4:
+                addFood("黄焖马");
                 break;
-            case R.id.btn_sub_menu2:
-                try {
-                    sum = DoubleUtils.subtract(sum, 12.275);
-                    mUIManager.subsideMenu("蒸熊掌" + 2, 1, 12.275, sum, new SendCallback() {
-                        @Override
-                        public void success() {
-                            Log.e(TAG, "#########     发送成功    ########");
-                        }
-
-                        @Override
-                        public void failure(Exception e) {
-                            Log.e(TAG, "## 发送失败 ## " + e.getMessage());
-                        }
-                    });
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Log.e(TAG, "error: " + e.getMessage());
-                }
+            case R.id.btn_add_5:
+                addFood("黄焖兔");
+                break;
+            case R.id.btn_add_6:
+                addFood("黄焖龙");
+                break;
+            case R.id.btn_add_7:
+                addFood("黄焖123");
+                break;
+            case R.id.btn_sub_1:
+                addFood("黄焖鸭");
+                break;
+            case R.id.btn_sub_2:
+                addFood("黄焖羊");
+                break;
+            case R.id.btn_sub_3:
+                addFood("黄焖狗");
+                break;
+            case R.id.btn_sub_4:
+                addFood("黄焖蛇");
+                break;
+            case R.id.btn_sub_5:
+                addFood("黄焖鼠");
+                break;
+            case R.id.btn_sub_6:
+                addFood("黄焖猴");
+                break;
+            case R.id.btn_sub_7:
+                addFood("黄焖456");
                 break;
             case R.id.btn_pay:
                 try {
-                    MenuManager.pay(DoubleUtils.add(sum, 35), sum, new SendCallback() {
-                        @Override
-                        public void success() {
-                            Log.e(TAG, "#########     发送成功    ########");
-                        }
+                    //Demo中收款金额等为固定值，方便测试
+                    MenuManager.getInstance().setMenu(mMenuMaps, 1.0, sum,
+                            DoubleUtils.add(sum, 201), 200, new SendCallback() {
+                                @Override
+                                public void success() {
+                                    Log.e(TAG, "支付成功 。。。");
+                                    mMenuMaps.clear();
+                                }
 
-                        @Override
-                        public void failure(Exception e) {
-                            Log.e(TAG, "## 发送失败 ## " + e.getMessage());
-                        }
-                    });
+                                @Override
+                                public void failure(Exception e) {
+                                    Log.e(TAG, "支付失败 。。。");
+                                }
+                            });
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 break;
-            case R.id.btn_clear_layout:
-                try {
-                    MenuManager.clearDishes(new SendCallback() {
-                        @Override
-                        public void success() {
-                            Log.e(TAG, "#########     发送成功    ########");
-                        }
-
-                        @Override
-                        public void failure(Exception e) {
-                            Log.e(TAG, "## 发送失败 ## " + e.getMessage());
-                        }
-                    });
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+            default:
                 break;
-
-            case R.id.btn_send_all_menu:
-                try {
-
-                    mUIManager.initDefaultUI(6, true, new SendCallback() {
-                        @Override
-                        public void success() {
-                            Log.e(TAG, "#########     发送成功    ########");
-                        }
-
-                        @Override
-                        public void failure(Exception e) {
-                            Log.e(TAG, "## 发送失败 ## " + e.getMessage());
-                        }
-                    });
-                    MenuManager.clearDishes(new SendCallback() {
-                        @Override
-                        public void success() {
-                            LinkedHashMap<String, Dishes> mMenuMap = new LinkedHashMap<>();
-
-                            for (int i = 0; i < 5; i++) {
-                                mMenuMap.put("清蒸鱼" + i, new Dishes("清蒸鱼" + i, 10, 19, 15, true));
-                            }
-                            try {
-                                MenuManager.setMenu(mMenuMap, 900, 200, 1000, 700, 7, true);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-                        @Override
-                        public void failure(Exception e) {
-                            Log.e(TAG, "出错了： " + e.getMessage());
-                        }
-                    });
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                break;
-            case R.id.btn_send_all_menu2:
-                try {
-                    MenuManager.clearDishes(new SendCallback() {
-                        @Override
-                        public void success() {
-                            LinkedHashMap<String, Dishes> mMenuMap = new LinkedHashMap<>();
-
-                            for (int i = 0; i < 5; i++) {
-                                mMenuMap.put("红烧排骨" + i, new Dishes("红烧排骨" + i, 10, 19, 15, true));
-                            }
-                            try {
-                                MenuManager.setMenu(mMenuMap, 900, 200, 1000, 700, 7, true);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-                        @Override
-                        public void failure(Exception e) {
-                            Log.e(TAG, "出错了： " + e.getMessage());
-                        }
-                    });
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
         }
     }
 
-    public String[][] getCmd() {
-        String[][] cmds = {
-                {
-                        "action", "clear",
-                        "name", "post_view",
-                },
-                {
-                        "action", "add",
-                        "parent", "post_view",
-                        "name", "layout_1",
-                        "type", "linear_layout",
-                        "orientation", "vertical",
-                        "width", "match_parent",
-                        "height", "0",
-                        "weight", "31.5",
-                        "background", "0xFFCD010C",
-                },
-                {
-                        "action", "add",
-                        "parent", "post_view",
-                        "name", "layout_2",
-                        "type", "linear_layout",
-                        "orientation", "horizontal",
-                        "gravity", "center",
-                        "width", "match_parent",
-                        "height", "0",
-                        "weight", "4",
-                        "padding_left", "10",
-                        "padding_right", "10",
-                        "background", "0xFFA52A2A",
-                },
-                {
-                        "action", "add",
-                        "parent", "post_view",
-                        "name", "layout_3",
-                        "type", "linear_layout",
-                        "orientation", "vertical",
-                        "width", "match_parent",
-                        "height", "0",
-                        "weight", "3",
-                },
-                ////////////////////////////////////////////收银页面
-                {
-                        "action", "add",
-                        "parent", "layout_1",
-                        "name", "layout_1_1",
-                        "type", "linear_layout",
-                        "orientation", "vertical",
-                        "width", "match_parent",
-                        "height", "0",
-                        "weight", "3",
-                },
-                {
-                        "action", "add",
-                        "parent", "layout_1",
-                        "name", "layout_1_2",
-                        "type", "linear_layout",
-                        "orientation", "vertical",
-                        "width", "match_parent",
-                        "padding_left", "10",
-                        "padding_right", "10",
-                        "height", "0",
-                        "weight", "18",
-                },
-                {
-                        "action", "add",
-                        "parent", "layout_1",
-                        "name", "layout_1_3",
-                        "type", "linear_layout",
-                        "orientation", "vertical",
-                        "width", "match_parent",
-                        "height", "0",
-                        "weight", "10.5",
-                },
-//////////////////////////////////////////////////物品的清单
-                {
-                        "action", "add",
-                        "parent", "layout_1_1",
-                        "name", "text1_title",
-                        "type", "text",
-                        "gravity", "center",
-                        "text", "物品清单",
-                        "size", "24",
-                        "color", "0xFFFFFFFF",
-                },
-                {
-                        "action", "add",
-                        "parent", "layout_1_1",
-                        "name", "text1_line",
-                        "type", "text",
-                        "width", "match_parent",
-                        "gravity", "bottom",
-                        "text", "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -",
-                        "size", "18",
-                        "color", "0xFFFFFFFF",
-                },
+    public void addFood(String name) {
+        try {
 
-                {
-                        "action", "add",
-                        "parent", "layout_1_3",
-                        "name", "layout_1_3_1",
-                        "type", "linear_layout",
-                        "orientation", "vertical",
-                        "width", "match_parent",
-                        "height", "0",
-                        "weight", "1.5",
-                },
-                {
-                        "action", "add",
-                        "parent", "layout_1_3_1",
-                        "name", "text2_line",
-                        "type", "text",
-                        "width", "match_parent",
-                        "gravity", "center",
-                        "text", "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -",
-                        "size", "18",
-                        "color", "0xFFFFFFFF",
-                },
-                {
-                        "action", "add",
-                        "parent", "layout_1_3",
-                        "name", "layout_1_3_2",
-                        "type", "linear_layout",
-                        "orientation", "vertical",
-                        "width", "match_parent",
-                        "padding_left", "10",
-                        "padding_right", "10",
-                        "height", "0",
-                        "weight", "9",
-                },
-/////////////////////////////////////优惠区
-                {
-                        "action", "add",
-                        "parent", "layout_1_3_2",
-                        "name", "layout_1_3_2_1",
-                        "type", "linear_layout",
-                        "orientation", "horizontal",
-                        "width", "match_parent",
-                        "height", "0",
-                        "weight", "1",
-                },
-                //////////优惠金额
-                {
-                        "action", "add",
-                        "parent", "layout_1_3_2_1",
-                        "name", "text_pre_title",
-                        "type", "text",
-                        "width", "0",
-                        "height", "match_parent",
-                        "weight", "1",
-                        "gravity", "left",
-                        "text", "优惠金额：",
-                        "size", "24",
-
-                        "color", "0xFFFFFFFF",
-                },
-                {
-                        "action", "add",
-                        "parent", "layout_1_3_2_1",
-                        "name", "text_pre",
-                        "type", "text",
-                        "width", "0",
-                        "height", "match_parent",
-                        "weight", "1",
-                        "gravity", "right",
-                        "text", "0.00元",
-                        "size", "24",
-                        "color", "0xFFFFFFFF",
-                },
-                ///////////////////////累计金额
-                {
-                        "action", "add",
-                        "parent", "layout_1_3_2",
-                        "name", "layout_1_3_2_2",
-                        "type", "linear_layout",
-                        "orientation", "horizontal",
-                        "width", "match_parent",
-                        "height", "0",
-                        "weight", "1",
-                },
-
-                {
-                        "action", "add",
-                        "parent", "layout_1_3_2_2",
-                        "name", "text_cum_title",
-                        "type", "text",
-                        "width", "0",
-                        "height", "match_parent",
-                        "weight", "1",
-                        "gravity", "left",
-                        "text", "累计金额：",
-                        "size", "24",
-
-                        "color", "0xFFFFFFFF",
-                },
-                {
-                        "action", "add",
-                        "parent", "layout_1_3_2_2",
-                        "name", "text_cum",
-                        "type", "text",
-                        "width", "0",
-                        "height", "match_parent",
-                        "weight", "1",
-                        "gravity", "right",
-                        "text", "0.00元",
-                        "size", "24",
-                        "color", "0xFFFFFFFF",
-                },
-                ////////////////////已付金额
-                {
-                        "action", "add",
-                        "parent", "layout_1_3_2",
-                        "name", "layout_1_3_2_3",
-                        "type", "linear_layout",
-                        "orientation", "horizontal",
-                        "width", "match_parent",
-                        "height", "0",
-                        "weight", "1",
-                },
-
-                {
-                        "action", "add",
-                        "parent", "layout_1_3_2_3",
-                        "name", "text_paid_title",
-                        "type", "text",
-                        "width", "0",
-                        "height", "match_parent",
-                        "weight", "1",
-                        "gravity", "left",
-                        "text", "已付金额：",
-                        "size", "24",
-                        "color", "0xFFFFFFFF",
-                },
-                {
-                        "action", "add",
-                        "parent", "layout_1_3_2_3",
-                        "name", "text_paid",
-                        "type", "text",
-                        "width", "0",
-                        "height", "match_parent",
-                        "weight", "1",
-                        "gravity", "right",
-                        "text", "0.00元",
-                        "size", "24",
-                        "color", "0xFFFFFFFF",
-                },
+            if (!connect_success) {
+                Toast.makeText(this, "没有连接广告系统，请重新初始化SDK", Toast.LENGTH_SHORT).show();
+                return;
+//                throw new Exception("connect failure ,please connect again ... ");
+            }
+            sum += 12;
+            if (mMenuMaps.containsKey(name)) {
 
 
-////////////////////////////////item_clum
-                {
-                        "action", "add",
-                        "parent", "layout_1_2",
-                        "name", "item_clum",
-                        "type", "linear_layout",
-                        "orientation", "horizontal",
-                        "width", "match_parent",
-                        "height", "wrap_content",
-                },
-                {
-                        "action", "add",
-                        "parent", "item_clum",
-                        "name", "item1",
-                        "type", "text",
-                        "gravity", "left",
-                        "width", "0",
-                        "weight", "1",
-                        "height", "wrap_content",
-                        "text", "品名",
-                        "size", "18",
-                        "color", "0xFFFFFFFF",
-                },
-                {
-                        "action", "add",
-                        "parent", "item_clum",
-                        "name", "item2",
-                        "type", "text",
-                        "gravity", "center",
-                        "width", "0",
-                        "weight", "1",
-                        "height", "wrap_content",
-                        "text", "数量 * 单价",
-                        "size", "18",
-                        "color", "0xFFFFFFFF",
-                },
-                {
-                        "action", "add",
-                        "parent", "item_clum",
-                        "name", "item3",
-                        "type", "text",
-                        "gravity", "right",
-                        "width", "0",
-                        "weight", "1",
-                        "height", "wrap_content",
-                        "text", "小计",
-                        "size", "18",
-                        "color", "0xFFFFFFFF",
-                },
-///////////////////////////找零
-                {
-                        "action", "add",
-                        "parent", "layout_2",
-                        "name", "text_odd_title",
-                        "type", "text",
-                        "gravity", "center",
-                        "width", "0",
-                        "height", "match_parent",
-                        "weight", "1",
-                        "text", "找 零：",
-                        "size", "28",
-                        "color", "0xFFFFFFFF",
-                },
-                {
-                        "action", "add",
-                        "parent", "layout_2",
-                        "name", "text_odd",
-                        "type", "text",
-                        "gravity", "center",
-                        "width", "0",
-                        "height", "match_parent",
-                        "weight", "1",
-                        "text", "0.00元",
-                        "size", "28",
-                        "color", "0xFFFFFFFF",
-                },
+                Dishes dishes = mMenuMaps.get(name);
+                dishes.setAmount(dishes.getAmount() + 1);
+                dishes.setSubtotal(dishes.getSubtotal() + 12);
+                mMenuMaps.remove(name);
+                mMenuMaps.put(name, dishes);
 
-                {
-                        "action", "add",
-                        "parent", "layout_3",
-                        "name", "text_cue",
-                        "type", "text",
-                        "gravity", "center",
-                        "width", "match_parent",
-                        "height", "match_parent",
-                        "text", "请仔细核对好自己购买的东西哦，亲！",
-                        "size", "18",
-                        "color", "0xFF000000",
-                },
-        };
+            } else {
+                mMenuMaps.put(name, new Dishes(name, 1, 12, 12, true));
+            }
 
-        return cmds;
+            Log.e(TAG, "menu size: " + mMenuMaps.size());
+            try {
+                MenuManager.getInstance().setMenu(mMenuMaps, 0.00, sum, 0.00, 0.00, new SendCallback() {
+                    @Override
+                    public void success() {
+                    }
+
+                    @Override
+                    public void failure(Exception e) {
+                        LogUtils.Error(TAG, "发送菜单失败： " + e.getMessage());
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-
-
 }
