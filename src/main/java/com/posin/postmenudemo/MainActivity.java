@@ -6,14 +6,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.posin.menumanager.pattern.MenuManager;
-import com.posin.menumanager.pattern.model.Dishes;
-import com.posin.menumanager.socket.listener.Callback;
-import com.posin.menumanager.socket.listener.SendCallback;
-import com.posin.menumanager.utils.DoubleUtils;
-import com.posin.menumanager.utils.LogUtils;
+import com.posin.menudevices.command.MenuManager;
+import com.posin.menudevices.command.ConnectCallback;
 
-import java.util.LinkedHashMap;
+import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -22,10 +18,9 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
 
-    private MenuManager mUIManager;
 
-    private boolean connect_success = false;
-    LinkedHashMap<String, Dishes> mMenuMaps;
+    private ArrayList<com.posin.menudevices.constant.Dishes> listDishes;
+    private boolean is_connect_successful = false;
     private double sum = 0;
 
 
@@ -35,23 +30,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         initData();
+
     }
 
     private void initData() {
         try {
-            mMenuMaps = new LinkedHashMap<>();
-            mUIManager = MenuManager.getInstance();
-            mUIManager.init(11, true, new Callback() {
-                @Override
-                public void connectSuccess() {
-                    connect_success = true;
-                }
+            listDishes = new ArrayList<>();
+            MenuManager.init(this);
 
-                @Override
-                public void connectFailure(Exception e) {
-                    connect_success = false;
-                }
-            });
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -59,7 +45,8 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick({R.id.btn_add_1, R.id.btn_add_2, R.id.btn_add_3, R.id.btn_add_4, R.id.btn_add_5,
             R.id.btn_add_6, R.id.btn_add_7, R.id.btn_sub_1, R.id.btn_sub_2, R.id.btn_sub_3,
-            R.id.btn_sub_4, R.id.btn_sub_5, R.id.btn_sub_6, R.id.btn_sub_7, R.id.btn_pay})
+            R.id.btn_sub_4, R.id.btn_sub_5, R.id.btn_sub_6, R.id.btn_sub_7, R.id.btn_pay,
+            R.id.btn_clear, R.id.btn_init})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_add_1:
@@ -106,20 +93,49 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.btn_pay:
                 try {
-                    //Demo中收款金额等为固定值，方便测试
-                    MenuManager.getInstance().setMenu(mMenuMaps, 1.0, sum,
-                            DoubleUtils.add(sum, 201), 200, new SendCallback() {
-                                @Override
-                                public void success() {
-                                    Log.e(TAG, "支付成功 。。。");
-                                    mMenuMaps.clear();
-                                }
+                    if (!is_connect_successful) {
+                        Toast.makeText(this, "连接失败，请重新初化连接", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    MenuManager.getInstance(this).pay(78, 1545, 1228.00, 250.0);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            case R.id.btn_clear:
+                try {
+                    if (!is_connect_successful) {
+                        Toast.makeText(this, "连接失败，请重新初化连接", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    listDishes.clear();
+                    MenuManager.getInstance(this).clearMenu();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
-                                @Override
-                                public void failure(Exception e) {
-                                    Log.e(TAG, "支付失败 。。。");
-                                }
-                            });
+
+                break;
+            case R.id.btn_init:
+                try {
+                    listDishes = new ArrayList<>();
+                    MenuManager.getInstance(this).initConnect(10, true, new ConnectCallback() {
+                        @Override
+                        public void success() {
+                            is_connect_successful = true;
+                            Log.e(TAG, "*************************************");
+                            Log.e(TAG, "****   连接成功   ****");
+                            Log.e(TAG, "*************************************");
+                        }
+
+                        @Override
+                        public void failure() {
+                            is_connect_successful = false;
+                            Log.e(TAG, "*************************************");
+                            Log.e(TAG, "****   连接失败   ****");
+                            Log.e(TAG, "*************************************");
+                        }
+                    });
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -129,46 +145,21 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * 增加菜品
+     * @param name 菜品
+     */
     public void addFood(String name) {
         try {
-
-            if (!connect_success) {
-                Toast.makeText(this, "没有连接广告系统，请重新初始化SDK", Toast.LENGTH_SHORT).show();
+            if (!is_connect_successful) {
+                Toast.makeText(this, "连接失败，请重新初化连接", Toast.LENGTH_SHORT).show();
                 return;
-//                throw new Exception("connect failure ,please connect again ... ");
             }
-            sum += 12;
-            if (mMenuMaps.containsKey(name)) {
-
-
-                Dishes dishes = mMenuMaps.get(name);
-                dishes.setAmount(dishes.getAmount() + 1);
-                dishes.setSubtotal(dishes.getSubtotal() + 12);
-                mMenuMaps.remove(name);
-                mMenuMaps.put(name, dishes);
-
-            } else {
-                mMenuMaps.put(name, new Dishes(name, 1, 12, 12, true));
-            }
-
-            Log.e(TAG, "menu size: " + mMenuMaps.size());
-            try {
-                MenuManager.getInstance().setMenu(mMenuMaps, 0.00, sum, 0.00, 0.00, new SendCallback() {
-                    @Override
-                    public void success() {
-                    }
-
-                    @Override
-                    public void failure(Exception e) {
-                        LogUtils.Error(TAG, "发送菜单失败： " + e.getMessage());
-                    }
-                });
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
+            listDishes.add(new com.posin.menudevices.constant.Dishes(name, 1, 20, 25));
+            MenuManager.getInstance(this).sendMenu(listDishes, 587);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 }
